@@ -5,6 +5,7 @@
     <title>Memory Game</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
+
         h1 {
             font-size: 1.5em;
             margin-left: 44px;
@@ -33,7 +34,10 @@
 <h1>Hello there</h1>
 <div id = "container"></div>
 <script>
-    var images = [
+
+    // Este es el array donde se encuentran las imagenes que se van a usar para el juego, hay dos de cada
+    // y es muy importante que cada par tenga el mismo source ya que es por eso que el programa identifica que son iguales
+    var imagenes = [
         "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/php-logo_1.png",
         "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/css3-logo.png",
         "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/html5-logo.png",
@@ -52,48 +56,53 @@
         "https://s3-us-west-2.amazonaws.com/s.cdpn.io/74196/python-logo.png",
     ];
 
+    //Se usa el método de randomizar las imagenes
+    randomizarImagenes();
 
-    randomizeImages();
-
-    // output images then hide them
-    var output = "<ol>";
+    //Aquí mediante código se crea un lista organizada y se añaden 16 elementos con 8 pares de imagenes
+    var salida = "<ol>";
     for (var i = 0; i < 16; i++) {
-        output += "<li>";
-        output += "<img src = '" + images[i] + "'/>";
-        output += "</li>";
+        salida += "<li>";
+        salida += "<img src = '" + imagenes[i] + "'/>";
+        salida += "</li>";
     }
-    output += "</ol>";
-    document.getElementById("container").innerHTML = output;
+    salida += "</ol>";
+    document.getElementById("container").innerHTML = salida;
+    //Con este comando de jquery se esconden las imagenes que se han cargado con el array
     $("img").hide();
 
-    var guess1 = "";
-    var guess2 = "";
-    var count = 0;
+    var intento1 = "";
+    var intento2 = "";
+    var cont = 0;
 
+    //
     $("li").click(function() {
-        if ((count < 2) &&  ($(this).children("img").hasClass("face-up")) === false) {
+        // Se entra en este if si el contador es menor a 2 y si la imagen no está cara arriba
+        if ((cont < 2) &&  ($(this).children("img").hasClass("face-up")) === false) {
 
-            // increment guess count, show image, mark it as face up
-            count++;
+            // Se incrementa el contador de intentos, se revela la imagen y la marca como boca arriba
+            cont++;
             $(this).children("img").show();
             $(this).children("img").addClass("face-up");
 
-            //guess #1
-            if (count === 1 ) {
-                guess1 = $(this).children("img").attr("src");
+            //Intento 1
+            if (cont === 1 ) {
+                //Iguala la variable intento1 a el src de la imagen
+                intento1 = $(this).children("img").attr("src");
             }
 
-            //guess #2
+            //Intento 2
             else {
-                guess2 = $(this).children("img").attr("src");
+                //Iguala la variable intento2 a el src de la imagen
+                intento2 = $(this).children("img").attr("src");
 
-                // since it's the 2nd guess check for match
-                if (guess1 === guess2) {
+                // Se mira si son iguales
+                if (intento1 === intento2) {
                     console.log("match");
-                    $("li").children("img[src='" + guess2 + "']").addClass("match");
+                    $("li").children("img[src='" + intento2 + "']").addClass("match");
                 }
 
-                // else it's a miss
+                // Si no son iguales se vuelve a esconder la imagen y se le quita la clase boca arriba
                 else {
                     console.log("miss");
                     setTimeout(function() {
@@ -102,15 +111,15 @@
                     }, 1000);
                 }
 
-                // reset
-                count = 0;
+                // Se resetea el contador de intentos
+                cont = 0;
                 setTimeout(function() { console.clear(); }, 60000);
             }
         }
     });
 
-    // randomize array of images
-    function randomizeImages(){
+    // Método para randomizar las imágenes
+    function randomizarImagenes(){
         Array.prototype.randomize = function()
         {
             var i = this.length, j, temp;
@@ -123,7 +132,7 @@
             }
         };
 
-        images.randomize();
+        imagenes.randomize();
     }
 </script>
 </body>
